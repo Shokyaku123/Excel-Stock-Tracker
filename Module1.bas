@@ -1,5 +1,4 @@
-Attribute VB_Name = "Module1"
-Sub StockAnalysis()
+Sub StockAnalysis():
 
     'get variables
     Dim ws As Worksheet
@@ -13,12 +12,12 @@ Sub StockAnalysis()
     Dim lastRow As Long
     Dim i As Long
     
+  For Each ws In Worksheets
     
-    
-Set ws = ThisWorkbook.Worksheets("2018")
-    On Error Resume Next
-    On Error GoTo 0
-    
+' Set ws = ThisWorkbook.Worksheets("2018")
+ ' On Error Resume Next
+  ' On Error GoTo 0
+    lawRow = Cells(Rows.Count, 1).End(xlUp).Row
  'making code work for whole dataset
  
 For i = 2 To lastRow
@@ -42,14 +41,15 @@ For i = 2 To lastRow
     
  'loop integers
 Summary_Table_Row = 2
- 
+ year_open = ws.Cells(2, 3).Value
  'the loop itself
         For i = 2 To ws.UsedRange.Rows.Count
+            
             If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1) Then
         'need value
             ticker = ws.Cells(i, 1).Value
             vol = ws.Cells(i, 7).Value
-            year_open = ws.Cells(i, 3).Value
+            ' year_open = ws.Cells(i, 3).Value ' can't update year_open when new row is found
             year_close = ws.Cells(i, 6).Value
             yearly_change = year_close - year_open
             percent_change = (year_close - year_open) / year_close
@@ -60,6 +60,7 @@ Summary_Table_Row = 2
             ws.Cells(Summary_Table_Row, 11).Value = percent_change
             ws.Cells(Summary_Table_Row, 12).Value = vol
             Summary_Table_Row = Summary_Table_Row + 1
+            year_open = ws.Cells(i, 3).Value
             
             vol = 0
         
@@ -75,7 +76,7 @@ Summary_Table_Row = 2
             Dim c As Long
             Dim color_cell As Range
             
-      Set rg = ws.Range("J2", Range("J2").End(xlDown))
+      Set rg = ws.Range("J2:J" & Summary_Table_Row)
         c = rg.Cells.Count
         
         For g = 1 To c
@@ -94,10 +95,7 @@ Summary_Table_Row = 2
         Next g
         
 
-
+    Next ws
     
             
 End Sub
-
-
-
